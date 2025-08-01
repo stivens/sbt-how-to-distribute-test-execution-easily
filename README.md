@@ -144,14 +144,23 @@ jobs:
 
 ## Demo Test Suite
 
-This project includes 10 test suites (`TestSuite1` through `TestSuite10`), each containing a test that sleeps for 1 minute to simulate long-running tests.
+This project includes 14 test suites (`TestSuite1` through `TestSuite14`), each containing a test that sleeps for 1 minute to simulate long-running tests.
 
 ### Sequential vs Parallel Execution Time
 
 - **Sequential CI**: ~5-10 minutes (10 tests × 1 minute each) on 1 GitHub runner
-- **Parallel CI (5 groups)**: ~2 minutes (2 tests per group × 1 minute each) on 5 GitHub runners  
-
+- **Parallel CI (5 groups)**: ~2 minutes (2 tests per group × 1 minute each) on 5 GitHub runners
+  
 *Note: Each test in this demo sleeps for 1 minute to simulate long-running integration tests*
+
+Parallel execution:
+
+![Demo - parallel execution](screenshots/ci-run-on-multiple-machines.gif "Parallel exeuction in action")
+
+Single-machine execution:
+
+![Demo - sequential execution](screenshots/ci-run-on-multiple-machines.gif "Sequential execution for reference")
+
 
 ## Technical Details
 
