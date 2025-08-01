@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_call:
+
+jobs:
+  compilation:
+    name: Compile the project
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup JDK 21, Scala, SBT
+        uses: ./.github/actions/setup-scala
+      - name: Compile
+        uses: ./.github/actions/compile
+
+  unit-tests-all:
+    name: Run all unit tests at once
+    runs-on: ubuntu-latest
+    needs: [compilation]
+    steps:
+        - shell: bash
+          run: sbt test
+
+  aggregate-all:
+    name: compile and test the project
+    runs-on: ubuntu-latest
+    needs: [compilation, unit-tests-all]
+    if: ${{ always() }} # do not skip if one of the actions above has failed!
+    env:
+      everything_ok: ${{ !contains(needs.*.result, 'failure') && (!contains(needs.*.result, 'skipped') || needs.compilation.result == 'skipped') }}
+    steps:
+      - name: The workflow has succeeded
+        if: ${{ env.everything_ok == 'true' }}
+        run: exit 0
+      - name: The workflow has failed
+        if: ${{ env.everything_ok == 'false' }}
+        run: exit 1
