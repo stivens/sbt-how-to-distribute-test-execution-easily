@@ -26,7 +26,7 @@ jobs:
     uses: ./.github/workflows/run-unit-tests-group.yml
     with:
       group_id: 1
-      num_groups: 10
+      num_groups: 5
 
   unit-tests-group-2:
     name: Run unit tests (2 of 5)
