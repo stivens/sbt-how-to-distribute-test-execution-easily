@@ -155,11 +155,11 @@ This project includes 14 test suites (`TestSuite1` through `TestSuite14`), each 
 
 Parallel execution:
 
-![Demo - parallel execution](screenshots/ci-run-on-multiple-machines.png "Parallel exeuction in action")
+![Demo - parallel execution](screenshots/ci-run-tests-on-multiple-machines.png "Parallel exeuction in action")
 
 Single-machine execution:
 
-![Demo - sequential execution](screenshots/ci-run-on-multiple-machines.png "Sequential execution for reference")
+![Demo - sequential execution](screenshots/ci-run-all-at-once.png "Sequential execution for reference")
 
 
 ## Technical Details
