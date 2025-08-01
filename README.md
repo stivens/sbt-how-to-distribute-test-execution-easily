@@ -148,8 +148,8 @@ This project includes 14 test suites (`TestSuite1` through `TestSuite14`), each 
 
 ### Sequential vs Parallel Execution Time
 
-- **Sequential CI**: ~5-10 minutes (10 tests × 1 minute each) on 1 GitHub runner
-- **Parallel CI (5 groups)**: ~2 minutes (2 tests per group × 1 minute each) on 5 GitHub runners
+- **Sequential CI**: ~7-10 minutes (10 tests × 1 minute each) on 1 GitHub runner
+- **Parallel CI (5 groups)**: ~3 minutes (3 tests per group × 1 minute each) on 5 GitHub runners
   
 *Note: Each test in this demo sleeps for 1 minute to simulate long-running integration tests*
 
