@@ -17,7 +17,6 @@ jobs:
     - uses: actions/checkout@v4
     - uses: ./.github/actions/setup-scala
     - uses: ./.github/actions/restore-compilation-cache
-    - run: docker compose -f ./deployment/local/docker-compose.yml up -d
     - name: Unit tests
       run: sbt 'parTestGroup ${{ inputs.group_id }} ${{ inputs.num_groups }}'
 
