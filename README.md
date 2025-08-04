@@ -1,10 +1,12 @@
-# [How to] SBT - Distribute Test Execution Easily
+# [How to] SBT - Distribute test execution, with ease
 
-This project demonstrates how to distribute test execution across multiple processes using SBT's built-in capabilities. Instead of running all tests sequentially, you can split your test suite into groups and run them in parallel, significantly reducing overall test execution time.
+This project demonstrates how to distribute test execution across multiple machines using SBT. Instead of running all tests sequentially\*, you can split your test suite into groups and run them in parallel, significantly reducing overall test execution time.
+
+\* *Modern machines have multiple cores, so there will be some level of parallelism even on a single machine, but we can do better.*
 
 ## The Problem
 
-When you have a large test suite with many time-consuming tests, running them sequentially can take a very long time. For example, if you have 10 tests that each take 1 minute to run, the total execution time would be 10 minutes when run sequentially.
+When you have a large test suite with many time-consuming tests, running them sequentially can take a very long time.
 
 ## The Solution
 
@@ -13,6 +15,19 @@ This project shows how to create a custom SBT task called `parTestGroup` that:
 1. **Divides tests into groups** - Splits all available tests into a specified number of groups
 2. **Runs specific groups** - Allows you to run just one group of tests at a time
 3. **Enables parallel execution** - Multiple machines can run different groups simultaneously
+
+## Benefits
+
+1. **Dramatically Faster CI/CD Pipelines** - by distributing across multiple GitHub runners
+2. **Scalable Architecture** - Easy to adjust the number of groups based on test suite size and available runners
+3. **Improved Developer Experience** - Faster feedback loops on pull requests and commits
+
+## Use Cases
+
+### Primary: CI/CD Pipeline Optimization
+- **Large Test Suites** - Projects with hundreds or thousands of tests requiring long execution times
+- **Integration Tests** - Long-running tests (database, API, end-to-end) that can be parallelized
+- **High-Frequency Deployments** - Teams needing fast feedback on multiple daily deployments
 
 ## How It Works
 
@@ -143,66 +158,20 @@ jobs:
       run: sbt 'parTestGroup ${{ inputs.group_id }} ${{ inputs.num_groups }}'
 ```
 
-#### Performance Comparison
+## Execution Time Comparison
 
-- **Sequential CI** (`.github/workflows/ci-run-all-at-once.yml`): ~5-10 minutes on 1 runner
-- **Parallel CI** (`.github/workflows/ci-run-tests-on-multiple-machines.yml`): ~1 minute on 10 runners
+### Demo Test Suite
 
+This project includes some mock test suites, each containing a test that busy waits to simulate long-running tests.
 
-## Demo Test Suite
+### Results
 
-This project includes 14 test suites (`TestSuite1` through `TestSuite14`), each containing a test that sleeps for 1 minute to simulate long-running tests.
-
-### Sequential vs Parallel Execution Time
-
-- **Sequential CI**: ~7-10 minutes (10 tests × 1 minute each) on 1 GitHub runner
-- **Parallel CI (5 groups)**: ~3 minutes (3 tests per group × 1 minute each) on 5 GitHub runners
-  
-*Note: Each test in this demo sleeps for 1 minute to simulate long-running integration tests*
-
-Parallel execution:
-
-![Demo - parallel execution](screenshots/ci-run-tests-on-multiple-machines.png "Parallel exeuction in action")
-
-Single-machine execution:
+- **Single-machine CI** (`.github/workflows/ci-run-all-at-once.yml`): ~20 minutes to see the final result
+- **Parallel CI** (`.github/workflows/ci-run-tests-on-multiple-machines.yml`): finished in ~4 minutes
 
 ![Demo - sequential execution](screenshots/ci-run-all-at-once.png "Sequential execution for reference")
 
-
-## Technical Details
-
-### GitHub Actions Infrastructure
-
-The project includes sophisticated CI/CD workflows:
-
-- **Custom Actions**:
-  - `.github/actions/setup-scala/` - JDK 21 and SBT setup with caching
-  - `.github/actions/compile/` - Compilation with intelligent caching
-  - `.github/actions/restore-compilation-cache/` - Cache restoration for faster builds
-
-- **Workflows**:
-  - `ci-run-all-at-once.yml` - Traditional sequential test execution (baseline)
-  - `ci-run-tests-on-multiple-machines.yml` - Parallel execution across 5 runners
-  - `run-unit-tests-group.yml` - Reusable workflow for individual test groups
-
-- **Features**:
-  - Compilation artifact caching between runners
-  - Result aggregation with proper failure handling
-  - Optimized for GitHub's hosted runners
-
-## Benefits
-
-1. **Dramatically Faster CI/CD Pipelines** - by distributing across multiple GitHub runners
-2. **Scalable Architecture** - Easy to adjust the number of groups based on test suite size and available runners
-3. **Improved Developer Experience** - Faster feedback loops on pull requests and commits
-
-## Use Cases
-
-### Primary: CI/CD Pipeline Optimization
-- **Large Test Suites** - Projects with hundreds or thousands of tests requiring long execution times
-- **Integration Tests** - Long-running tests (database, API, end-to-end) that can be parallelized
-- **High-Frequency Deployments** - Teams needing fast feedback on multiple daily deployments
-
+![Demo - parallel execution](screenshots/ci-run-tests-on-multiple-machines.png "Parallel exeuction in action")
 
 ## Getting Started
 
