@@ -21,13 +21,20 @@ The core functionality is implemented in `build.sbt` as a custom input task:
 ```scala
 lazy val parTestGroup = inputKey[Unit]("Runs a single test group")
 parTestGroup := (Def.inputTaskDyn {
-  val List(groupId, numGroups) = complete.DefaultParsers
+  val List(groupId, numberOfGroups) = complete.DefaultParsers
     .spaceDelimited("<arg>")
     .parsed
     .map(_.toInt)
 
   val allTests = (Test / definedTests).value
-  val groups   = allTests.grouped((allTests.size / numGroups) + 1).toArray
+
+  val numberOfTests = allTests.size
+  val numberOfTestsPerGroup =
+    if (numberOfTests % numberOfGroups == 0) {
+      numberOfTests / numberOfGroups
+    } else { (numberOfTests / numberOfGroups) + 1 }
+
+  val groups = allTests.grouped(numberOfTestsPerGroup).toArray
 
   val groupToRun     = groups(groupId - 1)
   val argForTestOnly = " " + groupToRun.map(_.name).mkString(" ")
