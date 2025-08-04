@@ -1,11 +1,12 @@
 package io.github.stivens.example.suites
 
+import io.github.stivens.example.Common
 import org.scalatest.funsuite.AnyFunSuite
 
 class TestSuite9 extends AnyFunSuite {
 
-  test("sleep 1 minute and pass") {
-    Thread.sleep(60000)
+  test("sleep some time and pass") {
+    Common.sleep()
     assert(true)
   }
 
