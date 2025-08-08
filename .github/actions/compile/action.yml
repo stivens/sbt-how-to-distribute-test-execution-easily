@@ -4,9 +4,6 @@ inputs:
   cache-key:
     description: Cache key
     default: target
-  compile-tests:
-    description: Should compile tests?
-    default: 'true'
 runs:
   using: 'composite'
   steps:
@@ -27,7 +24,7 @@ runs:
       with:
         path: |
           target/scala*/*test*
-        key: ${{ inputs.cache-key }}-tests-${{ hashFiles('build.sbt') }}-${{ hashFiles('test/com/**') }}
+        key: ${{ inputs.cache-key }}-tests-${{ hashFiles('build.sbt') }}-${{ hashFiles('src/test/scala/**') }}
 
     - name: Upload main compilation cache
       uses: actions/cache/save@v4
@@ -35,5 +32,5 @@ runs:
         path: |
           target/
           project/target
-        key: ${{ inputs.cache-key }}-main-${{ hashFiles('build.sbt') }}-${{ hashFiles('app/**') }}
+        key: ${{ inputs.cache-key }}-main-${{ hashFiles('build.sbt') }}-${{ hashFiles('src/main/scala/**') }}
 
