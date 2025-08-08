@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/compile
 
   unit-tests-all:
-    name: Run all unit tests at once
+    name: Run all tests at once
     runs-on: ubuntu-latest
     needs: [compilation]
     steps:
@@ -33,6 +33,6 @@ jobs:
         uses: ./.github/actions/restore-compilation-cache
         with:
           key: target
-      - name: Run all unit tests
+      - name: Run all tests
         shell: bash
         run: sbt test

@@ -110,18 +110,18 @@ jobs:
     runs-on: ubuntu-latest
     # ... compilation steps
 
-  unit-tests-group-1:
-    name: Run unit tests (1 of 10)
+  tests-group-1:
+    name: Run tests (1 of 10)
     needs: [compilation]
-    uses: ./.github/workflows/run-unit-tests-group.yml
+    uses: ./.github/workflows/run-tests-group.yml
     with:
       group_id: 1
       num_groups: 10
 
-  unit-tests-group-2:
-    name: Run unit tests (2 of 10)
+  tests-group-2:
+    name: Run tests (2 of 10)
     needs: [compilation]
-    uses: ./.github/workflows/run-unit-tests-group.yml
+    uses: ./.github/workflows/run-tests-group.yml
     with:
       group_id: 2
       num_groups: 10
@@ -130,11 +130,11 @@ jobs:
 
   aggregate-all:
     name: compile and test the project
-    needs: [compilation, unit-tests-group-1, ..., unit-tests-group-10]
+    needs: [compilation, tests-group-1, ..., tests-group-10]
     # Aggregates results from all groups
 ```
 
-#### Reusable Test Group Workflow (`.github/workflows/run-unit-tests-group.yml`)
+#### Reusable Test Group Workflow (`.github/workflows/run-tests-group.yml`)
 
 ```yaml
 on:
@@ -148,13 +148,13 @@ on:
         type: string
 
 jobs:
-  run_unit_tests_group:
+  run_tests_group:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: ./.github/actions/setup-scala
     - uses: ./.github/actions/restore-compilation-cache
-    - name: Unit tests
+    - name: Run tests
       run: sbt 'parTestGroup ${{ inputs.group_id }} ${{ inputs.num_groups }}'
 ```
 
