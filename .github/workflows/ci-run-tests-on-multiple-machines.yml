@@ -106,7 +106,7 @@ jobs:
     needs: [compilation, tests-group-1, tests-group-2, tests-group-3, tests-group-4, tests-group-5, tests-group-6, tests-group-7, tests-group-8, tests-group-9, tests-group-10]
     if: ${{ always() }} # do not skip if one of the actions above has failed!
     env:
-      everything_ok: ${{ !contains(needs.*.result, 'failure') && (!contains(needs.*.result, 'skipped') || needs.compilation.result == 'skipped') }}
+      everything_ok: ${{ !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'cancelled') && (!contains(needs.*.result, 'skipped') || needs.compilation.result == 'skipped') }}
     steps:
       - name: The workflow has succeeded
         if: ${{ env.everything_ok == 'true' }}
